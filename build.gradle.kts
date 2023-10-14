@@ -32,7 +32,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.14.22")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.88.1+1.20.1")
-    modImplementation("com.cobblemon:fabric:1.4.0+1.20.1-SNAPSHOT")
+    modImplementation("com.cobblemon:fabric:1.4.0+1.20.1")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
