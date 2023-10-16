@@ -1,7 +1,6 @@
 package dev.huli.misccobblemonfixes
 
-import com.cobblemon.mod.common.api.abilities.Abilities
-import com.cobblemon.mod.common.api.abilities.Ability
+
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleStartedPostEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
@@ -10,33 +9,63 @@ import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEv
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.pokemon.Pokemon
 import com.cobblemon.mod.common.pokemon.Species
-import com.cobblemon.mod.common.pokemon.abilities.HiddenAbility
 import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
 import com.cobblemon.mod.common.util.party
+import com.mojang.brigadier.CommandDispatcher
+import dev.huli.misccobblemonfixes.commands.MegaEvolve
+import dev.huli.misccobblemonfixes.config.MiscFixesConfig
+import dev.huli.misccobblemonfixes.items.MegaStone
+import dev.huli.misccobblemonfixes.permissions.MiscFixesPermissions
 import dev.huli.misccobblemonfixes.types.BattleHandler
-import kotlin.reflect.typeOf
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
+import net.minecraft.command.CommandRegistryAccess
+import net.minecraft.item.ItemGroups
+import net.minecraft.item.Items
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registry
+import net.minecraft.server.command.CommandManager
+import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.util.Identifier
 
 object MiscCobblemonFixes {
     lateinit var battleHandler : BattleHandler
+    lateinit var permissions: MiscFixesPermissions
     fun initialize() {
+        MiscFixesConfig()
         this.battleHandler = BattleHandler()
+        this.permissions = MiscFixesPermissions()
 
+        val MEGA_STONE = Registry.register(Registries.ITEM, Identifier("misccobblemonfixes","megastone"), MegaStone(FabricItemSettings(),
+            Items.DIAMOND))
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(ItemGroupEvents.ModifyEntries { content -> content.add(MEGA_STONE) })
         // Load official Cobblemon's config.
         CobblemonConfig()
+
+        CommandRegistrationCallback.EVENT.register(
+            CommandRegistrationCallback { dispatcher, registryAccess, environment -> registerCommands(dispatcher,registryAccess,environment)  }
+        )
 
         CobblemonEvents.BATTLE_STARTED_POST.subscribe { battleStartedPostEvent -> savePlayerTeam(battleStartedPostEvent)  }
         CobblemonEvents.BATTLE_VICTORY.subscribe { battleVictoryEvent -> postBattleItems(battleVictoryEvent)}
         CobblemonEvents.EVOLUTION_ACCEPTED.subscribe { evolutionAcceptedEvent -> preEvolution(evolutionAcceptedEvent)  }
     }
 
-    fun savePlayerTeam(event: BattleStartedPostEvent){
+    private fun registerCommands(
+        dispatcher: CommandDispatcher<ServerCommandSource>,
+        registry: CommandRegistryAccess,
+        selection: CommandManager.RegistrationEnvironment){
+        MegaEvolve().register(dispatcher)
+    }
+    private fun savePlayerTeam(event: BattleStartedPostEvent){
         if(event.battle.players.isNotEmpty() && event.battle.players.size == 2){
             this.battleHandler.addBattle(event.battle.battleId,event.battle.players)
         }
 
     }
 
-    fun postBattleItems(event: BattleVictoryEvent){
+    private fun postBattleItems(event: BattleVictoryEvent){
         val battleId = event.battle.battleId
         if(event.battle.players.isNotEmpty() && event.battle.players.size == 2 && this.battleHandler.battleExists(battleId)){
             event.battle.players.forEach { player ->
@@ -48,26 +77,20 @@ object MiscCobblemonFixes {
         }
     }
 
-    fun preEvolution(event: EvolutionAcceptedEvent){
+    private fun preEvolution(event: EvolutionAcceptedEvent){
         val species: Species = event.pokemon.species
         val mon: Pokemon = event.pokemon
         var ha = false
         species.abilities.forEach { potentialAbility ->
             if(potentialAbility.template == mon.ability.template){
-                if(potentialAbility.type == HiddenAbilityType){
-                    ha = true
-                }
-                else{
-                    ha = false
-                }
+                ha = potentialAbility.type == HiddenAbilityType
             }
         }
         CobblemonEvents.EVOLUTION_COMPLETE.subscribe { evolutionCompleteEvent -> postEvolution(evolutionCompleteEvent,ha,event.isCanceled)  }
 
     }
-    fun postEvolution(event: EvolutionCompleteEvent, isHA: Boolean, isCancelled: Boolean){
+    private fun postEvolution(event: EvolutionCompleteEvent, isHA: Boolean, isCancelled: Boolean){
         val mon:Pokemon = event.pokemon
-        val abilityTemplate = event.pokemon.ability.template
         var found = false
         if(!isCancelled){
             mon.species.abilities.forEach { potentialAbility ->

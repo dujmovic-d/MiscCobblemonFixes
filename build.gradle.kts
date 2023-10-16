@@ -25,11 +25,15 @@ loom {
 repositories {
     mavenCentral()
     maven("https://maven.impactdev.net/repository/development/")
+    maven("https://maven.nucleoid.xyz")
 }
 dependencies {
     minecraft("com.mojang:minecraft:1.20.1")
     mappings("net.fabricmc:yarn:1.20.1+build.10")
     modImplementation("net.fabricmc:fabric-loader:0.14.22")
+    modImplementation("eu.pb4:polymer-core:0.5.16+1.20.1")
+    modImplementation("eu.pb4:polymer-resource-pack:0.5.16+1.20.1")
+    modImplementation("xyz.nucleoid:server-translations-api:2.0.0+1.20")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.88.1+1.20.1")
     modImplementation("com.cobblemon:fabric:1.4.0+1.20.1")

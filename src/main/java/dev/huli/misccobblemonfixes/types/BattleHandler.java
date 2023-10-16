@@ -1,6 +1,8 @@
 package dev.huli.misccobblemonfixes.types;
 
 import com.cobblemon.mod.common.Cobblemon;
+import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
+import com.cobblemon.mod.common.battles.BattleRegistry;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,6 +31,12 @@ public class BattleHandler {
     }
     private ItemStack getOldItem(UUID battleId, ServerPlayerEntity player, int pokemonIndex){
         return Objects.requireNonNull(battleMap.get(battleId).get(player).get(pokemonIndex));
+    }
+    public PokemonBattle getPlayerBattle(ServerPlayerEntity player){
+        if(battleMap.values().stream().anyMatch(obj -> obj.containsKey(player))){
+            return BattleRegistry.INSTANCE.getBattleByParticipatingPlayer(player);
+        };
+        return null;
     }
 
     public void swapItem(UUID battleId, ServerPlayerEntity player, int pokemonIndex){
