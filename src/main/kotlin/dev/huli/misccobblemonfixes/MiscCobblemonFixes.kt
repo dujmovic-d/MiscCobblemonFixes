@@ -13,6 +13,7 @@ import com.cobblemon.mod.common.pokemon.abilities.HiddenAbilityType
 import com.cobblemon.mod.common.util.party
 import com.mojang.brigadier.CommandDispatcher
 import dev.huli.misccobblemonfixes.commands.MegaEvolve
+import dev.huli.misccobblemonfixes.commands.MegaStoneCommand
 import dev.huli.misccobblemonfixes.config.MiscFixesConfig
 import dev.huli.misccobblemonfixes.items.MegaStone
 import dev.huli.misccobblemonfixes.permissions.MiscFixesPermissions
@@ -32,13 +33,14 @@ import net.minecraft.util.Identifier
 object MiscCobblemonFixes {
     lateinit var battleHandler : BattleHandler
     lateinit var permissions: MiscFixesPermissions
+    val MEGA_STONE: MegaStone = Registry.register(Registries.ITEM, Identifier("misccobblemonfixes","megastone"), MegaStone(FabricItemSettings(),
+        Items.DIAMOND))
     fun initialize() {
         MiscFixesConfig()
         this.battleHandler = BattleHandler()
         this.permissions = MiscFixesPermissions()
 
-        val MEGA_STONE = Registry.register(Registries.ITEM, Identifier("misccobblemonfixes","megastone"), MegaStone(FabricItemSettings(),
-            Items.DIAMOND))
+
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(ItemGroupEvents.ModifyEntries { content -> content.add(MEGA_STONE) })
         // Load official Cobblemon's config.
         CobblemonConfig()
@@ -56,6 +58,7 @@ object MiscCobblemonFixes {
         dispatcher: CommandDispatcher<ServerCommandSource>,
         registry: CommandRegistryAccess,
         selection: CommandManager.RegistrationEnvironment){
+        MegaStoneCommand().register(dispatcher)
         MegaEvolve().register(dispatcher)
     }
     private fun savePlayerTeam(event: BattleStartedPostEvent){
