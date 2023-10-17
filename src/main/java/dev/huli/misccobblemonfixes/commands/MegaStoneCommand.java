@@ -9,9 +9,12 @@ import dev.huli.misccobblemonfixes.MiscCobblemonFixes;
 import dev.huli.misccobblemonfixes.items.*;
 import dev.huli.misccobblemonfixes.permissions.MiscFixesPermissions;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,7 +55,11 @@ public class MegaStoneCommand {
 
             if(set.contains("mega")){
                 MiscCobblemonFixes.INSTANCE.getMEGA_STONE().species = pokemon;
-                player.getInventory().offerOrDrop(MiscCobblemonFixes.INSTANCE.getMEGA_STONE().getDefaultStack());
+                NbtCompound nbt = new NbtCompound();
+                nbt.putString("species",pokemon.getName());
+                ItemStack megaStone = MiscCobblemonFixes.INSTANCE.getMEGA_STONE().getDefaultStack().setCustomName(Text.literal(pokemon.getName()+"ite"));
+                megaStone.setNbt(nbt);
+                player.getInventory().offerOrDrop(megaStone);
             }
         }
         return 1;
