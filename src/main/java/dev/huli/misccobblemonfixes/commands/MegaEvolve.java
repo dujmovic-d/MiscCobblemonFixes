@@ -4,12 +4,22 @@ package dev.huli.misccobblemonfixes.commands;
 import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
+import com.cobblemon.mod.common.battles.ShowdownMoveset;
+import com.cobblemon.mod.common.client.battle.SingleActionRequest;
+import com.cobblemon.mod.common.client.gui.battle.BattleGUI;
+import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGimmickButton;
+import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleMoveSelection;
+import com.cobblemon.mod.common.pokemon.FormData;
+import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.Species;
+import com.cobblemon.mod.common.pokemon.aspects.PokemonAspectsKt;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import dev.huli.misccobblemonfixes.MiscCobblemonFixes;
 import dev.huli.misccobblemonfixes.items.MegaStone;
 import dev.huli.misccobblemonfixes.permissions.MiscFixesPermissions;
+import kotlin.Unit;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -48,21 +58,23 @@ public class MegaEvolve {
             if(battle != null){
                 Objects.requireNonNull(battle.getActor(player)).getActivePokemon().forEach(activeBattlePokemon -> {
                     assert activeBattlePokemon.getBattlePokemon() != null;
-                    Species species = activeBattlePokemon.getBattlePokemon().getEffectedPokemon().getSpecies();
-                    if(activeBattlePokemon.getBattlePokemon().getEffectedPokemon().heldItem().getItem().getClass() == MegaStone.class){
-                        NbtCompound nbt = activeBattlePokemon.getBattlePokemon().getEffectedPokemon().heldItem().getNbt();
+                    Pokemon pokemon = activeBattlePokemon.getBattlePokemon().getEffectedPokemon();
+                    Species species = pokemon.getSpecies();
+                    if(pokemon.heldItem().getItem().getClass() == MegaStone.class){
+                        NbtCompound nbt = pokemon.heldItem().getNbt();
                         assert nbt != null;
                         if(Objects.equals(nbt.getString("species"), species.getName())){
-                            activeBattlePokemon.getBattlePokemon().getEffectedPokemon().setForm(species.getForm(new HashSet<>(){{
-                                add("mega");
-                            }}));
+                            species.getForms().forEach(formData -> {
+                                if(formData.getName().equalsIgnoreCase("mega")){
+                                    PokemonProperties.Companion.parse("mega"," ","=").apply(pokemon);
+                                }
+                            });
                             CobblemonEvents.BATTLE_VICTORY.subscribe(Priority.NORMAL, battleVictoryEvent -> {
-                                activeBattlePokemon.getBattlePokemon().getEffectedPokemon().setForm(species.getForm(new HashSet<>(){{
-                                    add("");
-                                }}));
-                                return null;
+                                PokemonProperties.Companion.parse("!mega"," ","=").apply(pokemon);
+                                return Unit.INSTANCE;
                             });
                         }
+
 
                 }
                 });
