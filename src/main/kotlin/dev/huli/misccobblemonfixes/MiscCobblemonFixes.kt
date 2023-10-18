@@ -15,6 +15,7 @@ import com.mojang.brigadier.CommandDispatcher
 import dev.huli.misccobblemonfixes.commands.MegaEvolve
 import dev.huli.misccobblemonfixes.commands.MegaStoneCommand
 import dev.huli.misccobblemonfixes.config.MiscFixesConfig
+import dev.huli.misccobblemonfixes.items.DynamaxCandy
 import dev.huli.misccobblemonfixes.items.MegaStone
 import dev.huli.misccobblemonfixes.permissions.MiscFixesPermissions
 import dev.huli.misccobblemonfixes.types.BattleHandler
@@ -29,12 +30,14 @@ import net.minecraft.registry.Registry
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.util.Identifier
+import net.minecraft.util.Rarity
 
 object MiscCobblemonFixes {
     lateinit var battleHandler : BattleHandler
     lateinit var permissions: MiscFixesPermissions
     val MEGA_STONE: MegaStone = Registry.register(Registries.ITEM, Identifier("misccobblemonfixes","megastone"), MegaStone(FabricItemSettings(),
         Items.DIAMOND))
+    val DYNAMAX_CANDY: DynamaxCandy = Registry.register(Registries.ITEM, Identifier("misccobblemonfixes", "dynamaxcandy"), DynamaxCandy(FabricItemSettings().maxCount(64).rarity(Rarity.RARE), Items.HONEYCOMB))
     fun initialize() {
         MiscFixesConfig()
         this.battleHandler = BattleHandler()
@@ -42,6 +45,7 @@ object MiscCobblemonFixes {
 
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(ItemGroupEvents.ModifyEntries { content -> content.add(MEGA_STONE) })
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS).register(ItemGroupEvents.ModifyEntries { content -> content.add(DYNAMAX_CANDY) })
         // Load official Cobblemon's config.
         CobblemonConfig()
 

@@ -19,6 +19,7 @@ public class MiscFixesConfig {
             .setPrettyPrinting()
             .create();
     public static int COMMAND_MEGAEVOLVE_PERMISSION_LEVEL = 4;      // Default for MC is 2.
+    public static int COMMAND_DYNAMAX_PERMISSION_LEVEL = 4;      // Default for MC is 2.
 
     //public static List<String> ANYLIST = new ArrayList<String>();
 
@@ -46,6 +47,7 @@ public class MiscFixesConfig {
             JsonObject permLevels = obj.get("permissionlevels").getAsJsonObject();
             HashMap<String, Integer> permissionMap = GSON.fromJson(permLevels, type);
             COMMAND_MEGAEVOLVE_PERMISSION_LEVEL = permissionMap.getOrDefault("command.pokebreed", 2);
+            COMMAND_DYNAMAX_PERMISSION_LEVEL = permissionMap.getOrDefault("command.pokebreed", 2);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -62,6 +64,10 @@ public class MiscFixesConfig {
                         .beginObject()
                             .name("command.megaevolve")
                             .value(COMMAND_MEGAEVOLVE_PERMISSION_LEVEL)
+                        .endObject()
+                        .beginObject()
+                            .name("command.dynamax")
+                            .value(COMMAND_DYNAMAX_PERMISSION_LEVEL)
                         .endObject()
                     .endObject()
                     .flush();

@@ -9,9 +9,11 @@ import net.minecraft.command.CommandSource;
 public class MiscFixesPermissions {
 
     public final CobblemonPermission MEGAEVOLVE_PERMISSION;
+    public final CobblemonPermission DYNAMAX_PERMISSION;
 
     public MiscFixesPermissions() {
         this.MEGAEVOLVE_PERMISSION = new CobblemonPermission("misccobblemonfixes.command.megaevolve", toPermLevel(MiscFixesConfig.COMMAND_MEGAEVOLVE_PERMISSION_LEVEL));
+        this.DYNAMAX_PERMISSION = new CobblemonPermission("misccobblemonfixes.command.dynamax", toPermLevel(MiscFixesConfig.COMMAND_DYNAMAX_PERMISSION_LEVEL));
 }
 
     public PermissionLevel toPermLevel(int permLevel) {
