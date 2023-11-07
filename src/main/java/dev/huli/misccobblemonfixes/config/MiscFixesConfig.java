@@ -9,9 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class MiscFixesConfig {
     Gson GSON = new GsonBuilder()
@@ -47,7 +45,7 @@ public class MiscFixesConfig {
             JsonObject permLevels = obj.get("permissionlevels").getAsJsonObject();
             HashMap<String, Integer> permissionMap = GSON.fromJson(permLevels, type);
             COMMAND_MEGAEVOLVE_PERMISSION_LEVEL = permissionMap.getOrDefault("command.pokebreed", 2);
-            COMMAND_DYNAMAX_PERMISSION_LEVEL = permissionMap.getOrDefault("command.pokebreed", 2);
+            //COMMAND_DYNAMAX_PERMISSION_LEVEL = permissionMap.getOrDefault("command.pokebreed", 2);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -65,10 +63,10 @@ public class MiscFixesConfig {
                             .name("command.megaevolve")
                             .value(COMMAND_MEGAEVOLVE_PERMISSION_LEVEL)
                         .endObject()
-                        .beginObject()
-                            .name("command.dynamax")
-                            .value(COMMAND_DYNAMAX_PERMISSION_LEVEL)
-                        .endObject()
+//                        .beginObject()
+//                            .name("command.dynamax")
+//                            .value(COMMAND_DYNAMAX_PERMISSION_LEVEL)
+//                        .endObject()
                     .endObject()
                     .flush();
         } catch (IOException e) {

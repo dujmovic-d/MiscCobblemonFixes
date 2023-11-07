@@ -5,30 +5,18 @@ import com.cobblemon.mod.common.api.Priority;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.api.events.CobblemonEvents;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
-import com.cobblemon.mod.common.battles.ShowdownMoveset;
-import com.cobblemon.mod.common.client.battle.SingleActionRequest;
-import com.cobblemon.mod.common.client.gui.battle.BattleGUI;
-import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGimmickButton;
-import com.cobblemon.mod.common.client.gui.battle.subscreen.BattleMoveSelection;
-import com.cobblemon.mod.common.pokemon.FormData;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.Species;
-import com.cobblemon.mod.common.pokemon.aspects.PokemonAspectsKt;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import dev.huli.misccobblemonfixes.MiscCobblemonFixes;
 import dev.huli.misccobblemonfixes.items.MegaStone;
-import dev.huli.misccobblemonfixes.permissions.MiscFixesPermissions;
 import kotlin.Unit;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
-
-import java.util.HashSet;
 import java.util.Objects;
-
-import static net.minecraft.server.command.CommandManager.literal;
 
 public class MegaEvolve {
     /**
@@ -37,13 +25,13 @@ public class MegaEvolve {
      * @param dispatcher - the command dispatcher.
      */
     public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        // Set up command.
-        dispatcher.register(
-                literal("megaevolve")
-                        .requires(src -> MiscFixesPermissions.checkPermission(src,
-                                MiscCobblemonFixes.permissions.MEGAEVOLVE_PERMISSION))
-                        .executes(this::execute)
-        );
+//        // Set up command.
+//        dispatcher.register(
+//                literal("megaevolve")
+//                        .requires(src -> MiscFixesPermissions.checkPermission(src,
+//                                MiscCobblemonFixes.permissions.MEGAEVOLVE_PERMISSION))
+//                        .executes(this::execute)
+//        );
     }
 
     /**
