@@ -36,22 +36,17 @@ public class PokemonEntityMixin {
         if(itemStack != null){
             if(itemStack.getItem() instanceof MegaStone){
                 String speciesMegaStone = itemStack.getOrCreateNbt().getString("species");
-                System.out.println(speciesMegaStone);
                 if(!pokemonName.equals("Charizard") && !pokemonName.equals("Mewtwo")){
-                    System.out.println("true");
                     if(pokemonName.toLowerCase().equals(speciesMegaStone)){
-                        System.out.println(pokemonName.toLowerCase()+"\n"+speciesMegaStone);
                         if(PokemonProperties.Companion.parse("mega=false", " ", "=").matches(pokemon))
                             PokemonProperties.Companion.parse("mega=true", " ", "=").apply(pokemon);
                     } else {
-                        System.out.println("false");
                         if(PokemonProperties.Companion.parse("mega=true", " ", "=").matches(pokemon))
                             PokemonProperties.Companion.parse("mega=false", " ", "=").apply(pokemon);
                     }
                 } else {
                     char megaType = speciesMegaStone.charAt(speciesMegaStone.length()-1);
                     if(pokemonName.toLowerCase().equals(speciesMegaStone.substring(0, speciesMegaStone.length()-1))){
-                        System.out.println("Species is equal "+speciesMegaStone.substring(0, speciesMegaStone.length()-1));
                         switch (megaType){
                             case 'x' -> {
                                 if(PokemonProperties.Companion.parse("megax=false", " ", "=").matches(pokemon)){
@@ -131,12 +126,10 @@ public class PokemonEntityMixin {
                 }
 
             } else if(returnedItem.getItem() instanceof GriseousOrb){
-                System.out.println("TINA");
                 if(pokemon.getSpecies().getName().equals("Giratina")){
                     PokemonProperties.Companion.parse("origin=false", " ", "=").apply(pokemon);
                 }
             } else if(returnedItem.getItem() instanceof LustrousGlobe){
-                System.out.println(pokemon.getSpecies().getName());
                 if(pokemon.getSpecies().getName().equals("Palkia")){
                     PokemonProperties.Companion.parse("origin=false", " ", "=").apply(pokemon);
                 }
