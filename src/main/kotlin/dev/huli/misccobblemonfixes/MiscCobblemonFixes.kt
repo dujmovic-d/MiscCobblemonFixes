@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.events.battles.BattleStartedPreEvent
 import com.cobblemon.mod.common.api.events.battles.BattleVictoryEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
 import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionCompleteEvent
+import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties.Companion.parse
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.platform.events.PlatformEvents
@@ -144,37 +145,11 @@ object MiscCobblemonFixes {
     }
 
     private fun preEvolution(event: EvolutionAcceptedEvent){
-        val species: Species = event.pokemon.species
-        val mon: Pokemon = event.pokemon
-        var ha = false
-
-        species.abilities.forEach { potentialAbility ->
-            if(potentialAbility.template == mon.ability.template){
-                ha = potentialAbility.type == HiddenAbilityType
+        event.pokemon.species.abilities.forEach { potentialAbility -> run{
+            if(PokemonProperties.Companion.parse("hiddenability"," ","=").matches(event.pokemon)){
+                CobblemonEvents.EVOLUTION_COMPLETE.subscribe { event -> PokemonProperties.Companion.parse("hiddenability"," ","=").apply(event.pokemon)  }
             }
-        }
-        CobblemonEvents.EVOLUTION_COMPLETE.subscribe { evolutionCompleteEvent -> postEvolution(evolutionCompleteEvent,ha,event.isCanceled)  }
+        } }
 
-    }
-    private fun postEvolution(event: EvolutionCompleteEvent, isHA: Boolean, isCancelled: Boolean){
-        val mon:Pokemon = event.pokemon
-        var found = false
-        if(!isCancelled){
-            mon.species.abilities.forEach { potentialAbility ->
-                if(potentialAbility.template == mon.ability.template){
-                    found = true
-                    return
-                }
-                if(isHA && potentialAbility.type is HiddenAbilityType){
-                    mon.ability = potentialAbility.template.create()
-                    found = true
-                    return
-                }
-                }
-            if(!found){
-                mon.species.abilities.firstNotNullOf { potentialAbility ->
-                    mon.ability = potentialAbility.template.create()  }
-            }
-        }
     }
 }
