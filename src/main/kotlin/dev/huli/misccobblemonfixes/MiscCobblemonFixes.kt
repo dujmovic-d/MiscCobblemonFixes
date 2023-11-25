@@ -146,7 +146,7 @@ object MiscCobblemonFixes {
 
     private fun preEvolution(event: EvolutionAcceptedEvent){
         event.pokemon.species.abilities.forEach { potentialAbility -> run{
-            if(PokemonProperties.Companion.parse("hiddenability"," ","=").matches(event.pokemon)){
+            if(PokemonProperties.Companion.parse("hiddenability=true"," ","=").matches(event.pokemon)){
                 CobblemonEvents.EVOLUTION_COMPLETE.subscribe { event -> PokemonProperties.Companion.parse("hiddenability"," ","=").apply(event.pokemon)  }
             }
         } }
