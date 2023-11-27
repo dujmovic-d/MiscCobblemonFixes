@@ -5,8 +5,6 @@
   "minVersion": "0.8",
   "client": [],
   "mixins": [
-    "PokemonEntityMixin",
-    "ShowdownInterpreterMixin"
   ],
   "injectors": {
     "defaultRequire": 1
