@@ -3,6 +3,7 @@ package dev.huli.misccobblemonfixes.types;
 import com.cobblemon.mod.common.Cobblemon;
 import com.cobblemon.mod.common.api.battles.model.PokemonBattle;
 import com.cobblemon.mod.common.battles.BattleRegistry;
+import com.cobblemon.mod.common.battles.ShowdownPokemon;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -44,5 +45,6 @@ public class BattleHandler {
         assert pokemon != null;
         pokemon.swapHeldItem(getOldItem(battleId,player,pokemonIndex),false);
     }
+
 
 }

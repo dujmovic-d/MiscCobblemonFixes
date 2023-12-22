@@ -33,12 +33,8 @@ object MiscCobblemonFixes {
         CobblemonEvents.BATTLE_STARTED_POST.subscribe { battleStartedPostEvent -> savePlayerTeam(battleStartedPostEvent)  }
         CobblemonEvents.BATTLE_VICTORY.subscribe { battleVictoryEvent -> postBattleItems(battleVictoryEvent)}
         CobblemonEvents.EVOLUTION_ACCEPTED.subscribe { evolutionAcceptedEvent -> preEvolution(evolutionAcceptedEvent)  }
-    }
 
-//    private fun addItemsToItemGroup(content: FabricItemGroupEntries) {
-//        content.add(MEGA_STONE)
-//        content.add(DYNAMAX_CANDY)
-//    }
+    }
 
 
 
@@ -74,4 +70,6 @@ object MiscCobblemonFixes {
             }
 
     }
+
+
 }
