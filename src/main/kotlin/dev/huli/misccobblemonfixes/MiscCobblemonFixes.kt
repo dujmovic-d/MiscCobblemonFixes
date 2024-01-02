@@ -32,7 +32,7 @@ object MiscCobblemonFixes {
         PlatformEvents.SERVER_STARTED.subscribe { started: ServerEvent.Started -> SERVER = started.server  }
         CobblemonEvents.BATTLE_STARTED_POST.subscribe { battleStartedPostEvent -> savePlayerTeam(battleStartedPostEvent)  }
         CobblemonEvents.BATTLE_VICTORY.subscribe { battleVictoryEvent -> postBattleItems(battleVictoryEvent)}
-        CobblemonEvents.EVOLUTION_ACCEPTED.subscribe { evolutionAcceptedEvent -> preEvolution(evolutionAcceptedEvent)  }
+        //CobblemonEvents.EVOLUTION_ACCEPTED.subscribe { evolutionAcceptedEvent -> preEvolution(evolutionAcceptedEvent)  }
 
     }
 
@@ -64,12 +64,14 @@ object MiscCobblemonFixes {
         }
     }
 
-    private fun preEvolution(event: EvolutionAcceptedEvent){
+
+    // Fix for Hidden Abilities upon Evolution
+    /*private fun preEvolution(event: EvolutionAcceptedEvent){
             if(PokemonProperties.Companion.parse("hiddenability"," ","=").matches(event.pokemon)){
                 CobblemonEvents.EVOLUTION_COMPLETE.subscribe { evoevent -> PokemonProperties.Companion.parse("hiddenability"," ","=").apply(evoevent.pokemon)  }
             }
 
-    }
+    }*/
 
 
 }
