@@ -1,9 +1,6 @@
 package dev.huli.misccobblemonfixes
 
 
-import com.cobblemon.mod.common.api.events.CobblemonEvents
-import com.cobblemon.mod.common.api.events.pokemon.evolution.EvolutionAcceptedEvent
-import com.cobblemon.mod.common.api.pokemon.PokemonProperties
 import com.cobblemon.mod.common.config.CobblemonConfig
 import com.cobblemon.mod.common.platform.events.PlatformEvents
 import com.cobblemon.mod.common.platform.events.ServerEvent
