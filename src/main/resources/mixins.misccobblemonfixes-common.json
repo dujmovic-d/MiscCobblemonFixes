@@ -1,11 +1,13 @@
-{
+ {
   "required": true,
   "package": "dev.huli.misccobblemonfixes.mixin",
   "compatibilityLevel": "JAVA_16",
   "minVersion": "0.8",
   "client": [],
   "mixins": [
-    "MirrorHerbMixin"
+    "MirrorHerbMixin",
+    "PokemonBattleMixin",
+    "ServerPlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
