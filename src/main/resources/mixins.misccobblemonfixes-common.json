@@ -5,9 +5,8 @@
   "minVersion": "0.8",
   "client": [],
   "mixins": [
-    "MirrorHerbMixin",
-    "PokemonBattleMixin",
-    "ServerPlayerEntityMixin"
+    "ActivateInstructionMixin",
+    "MirrorHerbMixin"
   ],
   "injectors": {
     "defaultRequire": 1

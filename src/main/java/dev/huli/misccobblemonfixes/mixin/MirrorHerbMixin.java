@@ -18,6 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -52,6 +53,7 @@ public class MirrorHerbMixin {
     }
 
 
+    @Unique
     private boolean teachEggMoves(Pokemon mon, ServerPlayerEntity player){
         AtomicBoolean taught = new AtomicBoolean(false);
         PlayerPartyStore party = Cobblemon.INSTANCE.getStorage().getParty(player);
